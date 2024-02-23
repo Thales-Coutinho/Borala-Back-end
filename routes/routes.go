@@ -8,5 +8,6 @@ import (
 func HandleRequests() {
 	r := gin.Default()
 	r.GET("/cities", controllers.ListCities)
+	r.GET("/trips", controllers.ListTrips)
 	r.Run()
 }
