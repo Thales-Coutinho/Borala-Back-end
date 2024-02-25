@@ -1,24 +1,16 @@
 package controllers
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/Thales-Coutinho/Borala-Back-end/models"
+	"github.com/gin-gonic/gin"
+)
 
 func ListCities(c *gin.Context) {
-	cities := []map[string]string{
-		{
-			"id":   "Guaruja",
-			"name": "Guaruja",
-		},
-		{
-			"id":   "Santos",
-			"name": "Santos",
-		},
-		{
-			"id":   "Praia Grande",
-			"name": "Praia Grande",
-		},
+	cities := []models.City{
+		{Id: "Guaruja", Name: "Guaruja"},
+		{Id: "Santos", Name: "Santos"},
+		{Id: "Praia Grande", Name: "Praia Grande"},
 	}
 
-	c.JSON(200, gin.H{
-		"cities": cities,
-	})
+	c.JSON(200, cities)
 }
