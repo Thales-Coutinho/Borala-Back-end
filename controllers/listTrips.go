@@ -1,8 +1,10 @@
 package controllers
 
 import (
-	"github.com/Thales-Coutinho/Borala-Back-end/models"
 	"github.com/gin-gonic/gin"
+
+	"github.com/Thales-Coutinho/Borala-Back-end/db"
+	"github.com/Thales-Coutinho/Borala-Back-end/models"
 )
 
 func ListTrips(c *gin.Context) {
@@ -10,18 +12,18 @@ func ListTrips(c *gin.Context) {
 	destinationCity := c.Request.URL.Query().Get("destinationCity")
 	day := c.Request.URL.Query().Get("day")
 
-	trips := []models.Trip{
-		{Id: "1", Name: "Gustavo", Score: "2,1", Hour: "08:30", Local: "ponte metalica", Price: "22,50", DepartureCity: "Santos", DestinationCity: "Praia Grande", Day: "2024-02-29"},
-		{Id: "2", Name: "Carmen", Score: "5,0", Hour: "12:30", Local: "em frente a prefeitura", Price: "30,00", DepartureCity: "Santos", DestinationCity: "Praia Grande", Day: "2024-02-29"},
-		{Id: "3", Name: "João", Score: "4,3", Hour: "17:40", Local: "Pasteko", Price: "30,00", DepartureCity: "Santos", DestinationCity: "Guaruja", Day: "2024-02-29"},
+	db := db.DataBaseConection()
+	query := "SELECT t.id, d.name, d.score, t.hour, t.local, t.price, t.DepartureCity, t.DestinationCity, t.day FROM trips t JOIN drivers d ON t.driverCPF = d.CPF WHERE t.DepartureCity = ? AND t.DestinationCity = ? AND t.day = ?"
+	selectTrips, err := db.Query(query, departureCity, destinationCity, day)
+	if err != nil {
+		panic(err.Error())
 	}
 
-	filteredTrips := []models.Trip{}
-	for _, trip := range trips {
-		if trip.DepartureCity == departureCity && trip.DestinationCity == destinationCity && trip.Day == day {
-			filteredTrips = append(filteredTrips, trip)
-		}
+	trips := []models.Trip{}
+	for selectTrips.Next() {
+		trip := models.Trip{}
+		selectTrips.Scan(&trip.Id, &trip.Name, &trip.Score, &trip.Hour, &trip.Local, &trip.Price, &trip.DepartureCity, &trip.DestinationCity, &trip.Day)
+		trips = append(trips, trip)
 	}
-
-	c.JSON(200, filteredTrips)
+	c.JSON(200, trips)
 }

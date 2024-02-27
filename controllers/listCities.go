@@ -11,7 +11,8 @@ import (
 
 func ListCities(c *gin.Context) {
 	db := db.DataBaseConection()
-	selectCities, err := db.Query("SELECT id, name FROM cities ")
+	query := "SELECT id, name FROM cities"
+	selectCities, err := db.Query(query)
 	if err != nil {
 		panic(err.Error())
 	}
