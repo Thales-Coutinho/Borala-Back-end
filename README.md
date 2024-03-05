@@ -55,5 +55,5 @@ Back-end que se utiliza de API REST para se comunicar com o back-end diponivel: 
 -   Lucas Daniel da Silva Araújo 
 -   Silas Matias de Oliveira
 -   Thales Martim  Coutinho
--   Thiago de Almeida Silva
+-     Thiago de Almeida Silva
 -   Vander Oliveira Jampaulo 
