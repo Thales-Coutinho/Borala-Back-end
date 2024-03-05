@@ -52,8 +52,8 @@ Back-end que se utiliza de API REST para se comunicar com o back-end diponivel: 
 ## Autores
 -   Henrique A. Cavalcanti
 -   Janeide Batista Gomes 
-- Lucas Daniel da Silva Araújo 
-- Silas Matias de Oliveira
-- Thales Martim  Coutinho
-- Thiago de Almeida Silva
+-   Lucas Daniel da Silva Araújo 
+-   Silas Matias de Oliveira
+-   Thales Martim  Coutinho
+-   Thiago de Almeida Silva
 -   Vander Oliveira Jampaulo 
