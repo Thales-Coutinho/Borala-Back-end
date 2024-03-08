@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/Thales-Coutinho/Borala-Back-end/db"
@@ -13,10 +15,15 @@ func ListTrips(c *gin.Context) {
 	day := c.Request.URL.Query().Get("day")
 
 	db := db.DataBaseConection()
-	query := "SELECT t.id, d.name, d.score, t.hour, t.local, t.price, t.DepartureCity, t.DestinationCity, t.day FROM trips t JOIN drivers d ON t.driverCPF = d.CPF WHERE t.DepartureCity = ? AND t.DestinationCity = ? AND t.day = ?"
+
+	query := `SELECT t.id, d.name, d.score, t.hour, t.local, t.price, t.DepartureCity, t.DestinationCity, t.day 
+				FROM trips t JOIN drivers d ON t.driverCPF = d.CPF 
+				WHERE t.DepartureCity = ? AND t.DestinationCity = ? AND t.day = ?`
+
 	selectTrips, err := db.Query(query, departureCity, destinationCity, day)
 	if err != nil {
-		panic(err.Error())
+		c.AbortWithError(http.StatusInternalServerError, err)
+		return
 	}
 
 	trips := []models.Trip{}

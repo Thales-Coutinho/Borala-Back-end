@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -14,7 +15,8 @@ func ListCities(c *gin.Context) {
 	query := "SELECT id, name FROM cities"
 	selectCities, err := db.Query(query)
 	if err != nil {
-		panic(err.Error())
+		c.AbortWithError(http.StatusInternalServerError, err)
+		return
 	}
 
 	cities := []models.City{}
