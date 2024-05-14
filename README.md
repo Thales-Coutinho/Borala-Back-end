@@ -29,6 +29,7 @@ Back-end que se utiliza de API REST para se comunicar com o back-end diponivel: 
 ## Como rodar o projeto?
 
 1. clone o repositório e instale a linguagem Go em seu computador (https://go.dev/doc/install)
+2. execute o comando (go get) para instalação das dependencias
 3. execute o comando (go run main.go) dentro do diretorio raiz da aplicação
 4. os end-points da aplicação já estarão disponiveis
 

@@ -31,5 +31,5 @@ func ListCities(c *gin.Context) {
 	db.SetMaxIdleConns(10)
 	defer db.Close()
 
-	c.JSON(200, cities)
+	c.JSON(http.StatusOK, cities)
 }

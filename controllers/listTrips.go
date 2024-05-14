@@ -10,17 +10,21 @@ import (
 )
 
 func ListTrips(c *gin.Context) {
-	departureCity := c.Request.URL.Query().Get("departureCity")
-	destinationCity := c.Request.URL.Query().Get("destinationCity")
-	day := c.Request.URL.Query().Get("day")
+
+	var requestData struct {
+		DepartureCity   string `json:"departure_city"`
+		DestinationCity string `json:"destination_city"`
+		Day             string `json:"day"`
+	}
+	c.BindJSON(&requestData)
 
 	db := db.DataBaseConection()
 
-	query := `SELECT t.id, d.name, d.score, t.hour, t.local, t.price, t.DepartureCity, t.DestinationCity, t.day 
-				FROM trips t JOIN drivers d ON t.driverCPF = d.CPF 
-				WHERE t.DepartureCity = ? AND t.DestinationCity = ? AND t.day = ?`
+	query := `SELECT t.id, d.name, d.score, t.hour, t.local, t.price, t.departure_city, t.destination_city, t.day 
+				FROM trips t JOIN drivers d ON t.driver_cpf = d.cpf 
+				WHERE t.departure_city = ? AND t.destination_city = ? AND t.day = ?`
 
-	selectTrips, err := db.Query(query, departureCity, destinationCity, day)
+	selectTrips, err := db.Query(query, requestData.DepartureCity, requestData.DestinationCity, requestData.Day)
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
 		return
@@ -32,5 +36,5 @@ func ListTrips(c *gin.Context) {
 		selectTrips.Scan(&trip.Id, &trip.Name, &trip.Score, &trip.Hour, &trip.Local, &trip.Price, &trip.DepartureCity, &trip.DestinationCity, &trip.Day)
 		trips = append(trips, trip)
 	}
-	c.JSON(200, trips)
+	c.JSON(http.StatusOK, trips)
 }
