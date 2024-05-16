@@ -15,7 +15,9 @@ func ListCities(c *gin.Context) {
 	query := "SELECT id, name FROM cities"
 	selectCities, err := db.Query(query)
 	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error on ListTrips": err.Error(),
+		})
 		return
 	}
 

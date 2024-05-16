@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -16,6 +17,7 @@ func ListTrips(c *gin.Context) {
 		DestinationCity string `json:"destination_city"`
 		Day             string `json:"day"`
 	}
+
 	c.BindJSON(&requestData)
 
 	db := db.DataBaseConection()
@@ -25,8 +27,11 @@ func ListTrips(c *gin.Context) {
 				WHERE t.departure_city = ? AND t.destination_city = ? AND t.day = ?`
 
 	selectTrips, err := db.Query(query, requestData.DepartureCity, requestData.DestinationCity, requestData.Day)
+
 	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error on ListTrips": err.Error(),
+		})
 		return
 	}
 
@@ -36,5 +41,10 @@ func ListTrips(c *gin.Context) {
 		selectTrips.Scan(&trip.Id, &trip.Name, &trip.Score, &trip.Hour, &trip.Local, &trip.Price, &trip.DepartureCity, &trip.DestinationCity, &trip.Day)
 		trips = append(trips, trip)
 	}
+	db.SetConnMaxLifetime(time.Minute * 3)
+	db.SetMaxOpenConns(10)
+	db.SetMaxIdleConns(10)
+	defer db.Close()
+
 	c.JSON(http.StatusOK, trips)
 }
